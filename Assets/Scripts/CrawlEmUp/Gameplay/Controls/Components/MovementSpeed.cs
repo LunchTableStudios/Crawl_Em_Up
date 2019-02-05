@@ -1,4 +1,4 @@
-namespace CrawlEmUp
+namespace CrawlEmUp.Gameplay.Controls
 {
     using UnityEngine;
 

@@ -127,8 +127,8 @@ GameObject:
   - component: {fileID: 292940892}
   - component: {fileID: 292940891}
   - component: {fileID: 292940890}
-  - component: {fileID: 292940898}
   - component: {fileID: 292940897}
+  - component: {fileID: 292940898}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -180,6 +180,7 @@ MonoBehaviour:
   Delta:
     x: 0
     y: 0
+  Friction: 0.9
 --- !u!114 &292940892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,7 +274,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 806012652}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -286,10 +288,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 292940889}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04e4ed1b1b31e43138a1fb42b2c6b679, type: 3}
+  m_Script: {fileID: 11500000, guid: 312dc76f57674441fba6a0a662031994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Value: 5
+  Id: 0
+  Names:
+  - HorizontalMovement
+  - VerticalMovement
 --- !u!114 &292940898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,10 +304,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 292940889}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c4176f841afc42dab7cefc2783fabe9, type: 3}
+  m_Script: {fileID: 11500000, guid: 266346dd3f8254a549acdc740863d478, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 0
+  Value: 5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,6 +390,62 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &806012651
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 806012652}
+  - component: {fileID: 806012654}
+  - component: {fileID: 806012653}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &806012652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806012651}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 292940896}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &806012653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806012651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c27c7c0fb218347a6837a93e06880064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &806012654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806012651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf10cdea1344482e91a4f2b58506b77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1896713163
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,6 +621,15 @@ MonoBehaviour:
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
+    - _id: 2
+      _name: Shoot
+      _type: 1
+      _descriptiveName: Shoot
+      _positiveDescriptiveName: 
+      _negativeDescriptiveName: 
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 0
     actionCategories:
     - _name: Default
       _descriptiveName: Default
@@ -569,12 +639,12 @@ MonoBehaviour:
     actionCategoryMap:
       list:
       - categoryId: 0
-        actionIds: 0000000001000000
+        actionIds: 000000000100000002000000
     inputBehaviors:
     - _id: 0
       _name: Default
       _joystickAxisSensitivity: 1
-      _digitalAxisSimulation: 1
+      _digitalAxisSimulation: 0
       _digitalAxisSnap: 1
       _digitalAxisInstantReverse: 0
       _digitalAxisGravity: 3
@@ -671,11 +741,22 @@ MonoBehaviour:
         _modifierKey1: 0
         _modifierKey2: 0
         _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 2
+        _elementType: 1
+        _elementIdentifierId: -1
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 32
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
     mouseMaps: []
     customControllerMaps: []
     customControllers: []
     playerIdCounter: 1
-    actionIdCounter: 2
+    actionIdCounter: 3
     actionCategoryIdCounter: 1
     inputBehaviorIdCounter: 1
     mapCategoryIdCounter: 1
