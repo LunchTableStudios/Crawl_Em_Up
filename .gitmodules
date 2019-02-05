@@ -1,0 +1,3 @@
+[submodule "Assets/Scripts/LTS_ToolKit"]
+	path = Assets/Scripts/LTS_ToolKit
+	url = https://github.com/LunchTableStudios/LTS_ToolKit.git
