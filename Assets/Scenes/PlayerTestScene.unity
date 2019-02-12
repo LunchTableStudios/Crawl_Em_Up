@@ -128,7 +128,6 @@ GameObject:
   - component: {fileID: 292940891}
   - component: {fileID: 292940890}
   - component: {fileID: 292940897}
-  - component: {fileID: 292940898}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -295,19 +294,6 @@ MonoBehaviour:
   Names:
   - HorizontalMovement
   - VerticalMovement
---- !u!114 &292940898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 292940889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 266346dd3f8254a549acdc740863d478, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Value: 5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,7 +386,7 @@ GameObject:
   m_Component:
   - component: {fileID: 806012652}
   - component: {fileID: 806012654}
-  - component: {fileID: 806012653}
+  - component: {fileID: 806012655}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -422,18 +408,6 @@ Transform:
   m_Father: {fileID: 292940896}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &806012653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806012651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c27c7c0fb218347a6837a93e06880064, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &806012654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -446,6 +420,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf10cdea1344482e91a4f2b58506b77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &806012655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806012651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58bdaab000ec54d4391ebac34d18b33f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 0
+  Names:
+  - Shoot
 --- !u!1 &1896713163
 GameObject:
   m_ObjectHideFlags: 0
