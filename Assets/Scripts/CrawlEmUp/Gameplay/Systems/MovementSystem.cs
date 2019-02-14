@@ -2,8 +2,8 @@ namespace CrawlEmUp.Gameplay
 {
     using UnityEngine;
     using Unity.Entities;
-    using Unity.Burst;
     using Unity.Jobs;
+    using Unity.Burst;
     using Unity.Collections;
     using Unity.Transforms;
     using Unity.Mathematics;
@@ -25,12 +25,10 @@ namespace CrawlEmUp.Gameplay
 
         protected override JobHandle OnUpdate( JobHandle inputDeps )
         {
-            MovementJob movementJob = new MovementJob()
+            return new MovementJob()
             {
                 deltaTime = Time.deltaTime
-            };
-
-            return movementJob.Schedule( this, inputDeps );
+            }.Schedule( this, inputDeps );
         }
     }
 }
