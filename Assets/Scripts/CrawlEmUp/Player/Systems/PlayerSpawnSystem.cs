@@ -8,10 +8,12 @@ namespace CrawlEmUp.Player
     public class PlayerSpawnSystem : ComponentSystem
     {
         private ComponentGroup playerSpawnGroup;
+        private ComponentGroup playerGroup;
 
         protected override void OnCreateManager()
         {
             playerSpawnGroup = GetComponentGroup( typeof( PlayerSpawn ), typeof( Position ) );
+            playerGroup = GetComponentGroup( typeof( Player ) );
         }
 
         protected override void OnUpdate()
