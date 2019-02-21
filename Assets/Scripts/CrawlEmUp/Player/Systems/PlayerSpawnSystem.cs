@@ -18,7 +18,7 @@ namespace CrawlEmUp.Player
 
         protected override void OnUpdate()
         {
-            using ( NativeArray<Entity> playerSpawns = playerSpawnGroup.ToEntityArray( Allocator.TempJob ) )
+            using( NativeArray<Entity> playerSpawns = playerSpawnGroup.ToEntityArray( Allocator.TempJob ) )
             {
                 foreach( Entity playerSpawn in playerSpawns )
                 {

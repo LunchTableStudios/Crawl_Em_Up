@@ -18,7 +18,7 @@ namespace CrawlEmUp.Gameplay
             }
         }
 
-        protected override JobHandle OnUpdate(JobHandle inputDeps)
+        protected override JobHandle OnUpdate( JobHandle inputDeps )
         {
             return new ApplyMovementToVelocity().Schedule( this, inputDeps );
         }
