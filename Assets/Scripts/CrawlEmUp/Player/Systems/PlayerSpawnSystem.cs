@@ -20,15 +20,23 @@ namespace CrawlEmUp.Player
         {
             using( NativeArray<Entity> playerSpawns = playerSpawnGroup.ToEntityArray( Allocator.TempJob ) )
             {
+                int playerCount = 0;
                 foreach( Entity playerSpawn in playerSpawns )
                 {
                     GameObject playerPrefab = EntityManager.GetSharedComponentData<PlayerSpawn>( playerSpawn ).prefab;
+
                     Entity playerEntity = EntityManager.Instantiate( playerPrefab );
+                    Player player = EntityManager.GetComponentData<Player>( playerEntity );
                     Position playerPosition = EntityManager.GetComponentData<Position>( playerSpawn );
 
-                    EntityManager.SetComponentData( playerEntity, playerPosition );
+                    player.Id = playerCount;
 
+                    EntityManager.SetComponentData( playerEntity, player );
+                    EntityManager.SetComponentData( playerEntity, playerPosition );
+                    
                     EntityManager.DestroyEntity( playerSpawn );
+
+                    playerCount++;
                 }
             }
         }

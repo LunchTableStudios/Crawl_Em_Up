@@ -4,6 +4,6 @@ namespace CrawlEmUp.Gameplay
 
     public struct Firing : IComponentData
     {
-        
+        public float Time;
     }
 }
