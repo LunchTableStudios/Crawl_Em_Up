@@ -3,61 +3,54 @@ namespace CrawlEmUp.Gameplay
     using Unity.Entities;
     using Unity.Jobs;
     using Unity.Collections;
+    using Unity.Burst;
 
     using Rewired;
 
-    public class WeaponFiringSystem : ComponentSystem
+    public class WeaponFiringSystem : JobComponentSystem
     {
         private ComponentGroup weaponGroup;
 
+        [ BurstCompile ]
         private struct FireWeaponJob : IJobParallelFor
         {
-            [ ReadOnly ] public NativeArray<Entity> weaponEntities;
+            public EntityArray WeaponEntities;
             public EntityCommandBuffer.Concurrent CommandBuffer;
             public float time;
 
             public void Execute( int index )
             {
-                CommandBuffer.AddComponent<Firing>( index, weaponEntities[ index ], new Firing{ Time = time } );
+                CommandBuffer.AddComponent<Firing>( index, WeaponEntities[ index ], new Firing{ Time = time } );
             }
         }
 
+        private struct WeaponEntityFilter
+        {
+            public readonly int Length;
+            public EntityArray Entities;
+            public ComponentDataArray<Weapon> WeaponComponents;
+            public SubtractiveComponent<Firing> FiringComponents;
+        }
+
+        [ Inject ] private WeaponEntityFilter weaponEntityFilter;
         [ Inject ] private FiringBarrier firingBarrier;
 
-        protected override void OnCreateManager()
+        protected override JobHandle OnUpdate( JobHandle inputDeps )
         {
-            // weaponGroup = GetComponentGroup(
-            //     typeof( Weapon ), 
-            //     ComponentType.Subtractive<Firing>()
-            // );
-            weaponGroup = GetComponentGroup( new EntityArchetypeQuery(){
-                All = new ComponentType[] {
-                    ComponentType.Create<Weapon>()
-                },
-                None = new ComponentType[] {
-                    ComponentType.Create<Firing>()
-                }
-            } );
-        }
+            float time = UnityEngine.Time.time;
+            Player rewiredPlayer = ReInput.players.GetSystemPlayer();
 
-        protected override void OnUpdate()
-        {
-            using( NativeArray<Entity> weapons = weaponGroup.ToEntityArray( Allocator.TempJob ) )
+            if( rewiredPlayer.GetButton( "Shoot" ) )
             {
-                Player rewiredPlayer = ReInput.players.GetSystemPlayer();
-                if( rewiredPlayer.GetButton( "Shoot" ) )
+                return new FireWeaponJob
                 {
-                    FireWeaponJob fireWeaponJob = new FireWeaponJob
-                    {
-                        weaponEntities = weapons,
-                        CommandBuffer = firingBarrier.CreateCommandBuffer().ToConcurrent(),
-                        time = UnityEngine.Time.time
-                    };
-
-                    JobHandle jobHandle = fireWeaponJob.Schedule( weapons.Length, 16 );    
-                    jobHandle.Complete();    
-                }
+                    WeaponEntities = weaponEntityFilter.Entities,
+                    CommandBuffer = firingBarrier.CreateCommandBuffer().ToConcurrent(),
+                    time = time
+                }.Schedule( weaponEntityFilter.Length, 16, inputDeps );
             }
+
+            return inputDeps;
         }
 
         public class FiringBarrier : BarrierSystem {}

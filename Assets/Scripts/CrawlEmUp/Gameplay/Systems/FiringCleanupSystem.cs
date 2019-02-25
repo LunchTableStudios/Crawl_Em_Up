@@ -3,10 +3,12 @@ namespace CrawlEmUp.Gameplay
     using Unity.Entities;
     using Unity.Jobs;
     using Unity.Collections;
+    using Unity.Burst;
 
     [ UpdateAfter( typeof( WeaponFiringSystem ) ) ]
-    public class FiringCleanupSystem : ComponentSystem
+    public class FiringCleanupSystem : JobComponentSystem
     {
+        [ BurstCompile ]
         private struct RemoveFiringJob : IJobParallelFor
         {
             public EntityArray WeaponEntities;
@@ -19,7 +21,7 @@ namespace CrawlEmUp.Gameplay
 
             public void Execute( int index )
             {
-                if( Weapons[index].FireRate + time > Firings[index].Time )
+                if( time > Firings[index].Time + Weapons[index].FireRate  )
                 {
                     CommandBuffer.RemoveComponent<Firing>( index, WeaponEntities[index] );
                 }
@@ -39,19 +41,18 @@ namespace CrawlEmUp.Gameplay
         [ Inject ] private WeaponFiringEntityFilter weaponFiringEntityFilter;
         [ Inject ] private FiringCleanupBarrier firingCleanupBarrier;
 
-        protected override void OnUpdate()
+        protected override JobHandle OnUpdate( JobHandle inputDeps )
         {
-            RemoveFiringJob firingJob = new RemoveFiringJob
+            float time = UnityEngine.Time.time;
+            
+            return new RemoveFiringJob
             {
                 WeaponEntities = weaponFiringEntityFilter.Entities,
                 Weapons = weaponFiringEntityFilter.WeaponComponents,
                 Firings = weaponFiringEntityFilter.FiringComponents,
                 CommandBuffer = firingCleanupBarrier.CreateCommandBuffer().ToConcurrent(),
-                time = UnityEngine.Time.time
-            };
-
-            JobHandle handle = firingJob.Schedule( weaponFiringEntityFilter.Length, 16 );
-            handle.Complete();
+                time = time
+            }.Schedule( weaponFiringEntityFilter.Length, 16, inputDeps );
         }
 
         public class FiringCleanupBarrier : BarrierSystem {}
