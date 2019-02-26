@@ -4,16 +4,24 @@ namespace CrawlEmUp.Gameplay
     using Unity.Jobs;
     using Unity.Burst;
     using Unity.Transforms;
+    using Unity.Rendering;
+    using Unity.Collections;
+
+    using Bootstraps;
 
     public class ProjectileSpawn : JobComponentSystem
     {
-        private struct SpawnProjectileJob : IJobProcessComponentData<Firing, Position, Rotation>
+        private struct SpawnProjectileJob : IJobParallelFor
         {
-            public EntityCommandBuffer.Concurrent CommandBuffer;
+            [ ReadOnly ] public EntityCommandBuffer.Concurrent CommandBuffer;
+            public ComponentDataArray<Position> Positions;
+            public ComponentDataArray<Rotation> Rotations;
 
-            public void Execute( ref Firing firing, ref Position position, ref Rotation rotation )
+            public void Execute( int index )
             {
-                
+                Entity projectile = CommandBuffer.CreateEntity( index );
+                CommandBuffer.AddSharedComponent( index, projectile, GameplayBootstrap.ProjectileMeshComponent );
+                CommandBuffer.AddComponent( index, projectile, Positions[index] );
             }
         }
 
@@ -23,18 +31,22 @@ namespace CrawlEmUp.Gameplay
         protected override void OnCreateManager()
         {
             projectileSpawnOriginGroup = GetComponentGroup(
-                typeof( Firing ),
-                typeof( Position ),
-                typeof( Rotation )
+                ComponentType.Create<Firing>(),
+                ComponentType.Create<Position>(),
+                ComponentType.Create<Rotation>()
             );
+
+            projectileSpawnOriginGroup.SetFilterChanged( ComponentType.Create<Firing>() );
         }
 
         protected override JobHandle OnUpdate( JobHandle inputDeps )
         {
             return new SpawnProjectileJob
             {
-                CommandBuffer = projectileBarrier.CreateCommandBuffer().ToConcurrent()
-            }.Schedule( this, inputDeps );
+                CommandBuffer = projectileBarrier.CreateCommandBuffer().ToConcurrent(),
+                Positions = projectileSpawnOriginGroup.GetComponentDataArray<Position>(),
+                Rotations = projectileSpawnOriginGroup.GetComponentDataArray<Rotation>()
+            }.Schedule( projectileSpawnOriginGroup.CalculateLength(), 64, inputDeps );
         }
 
         private class ProjectileBarrier : BarrierSystem {}
