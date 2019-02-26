@@ -6,6 +6,7 @@ namespace CrawlEmUp.Gameplay
     using Unity.Transforms;
     using Unity.Rendering;
     using Unity.Collections;
+    using Unity.Mathematics;
 
     using Bootstraps;
 
@@ -19,9 +20,22 @@ namespace CrawlEmUp.Gameplay
 
             public void Execute( int index )
             {
+                float2 heading = GetHeadingDirection( Rotations[index].Value.value );
+
                 Entity projectile = CommandBuffer.CreateEntity( index );
                 CommandBuffer.AddSharedComponent( index, projectile, GameplayBootstrap.ProjectileMeshComponent );
                 CommandBuffer.AddComponent( index, projectile, Positions[index] );
+                CommandBuffer.AddComponent( index, projectile, new Heading{ Value = heading } );
+            }
+
+            private float2 GetHeadingDirection( float4 quaternion )
+            {
+                float4 nq = math.normalize( quaternion );
+                float2 directionVector = float2.zero;
+                directionVector.x = 2.0f * ( nq.x * nq.z - nq.w * nq.y );
+                directionVector.y = 2.0f * ( nq.y * nq.z - nq.w * nq.x );
+
+                return directionVector;
             }
         }
 
