@@ -17,11 +17,11 @@ namespace CrawlEmUp.Gameplay
 
             public EntityCommandBuffer.Concurrent CommandBuffer;
 
-            public float time;
+            public float Time;
 
             public void Execute( int index )
             {
-                if( time > Firings[index].Time + Weapons[index].FireRate  )
+                if( Time > Firings[index].Time + Weapons[index].FireRate  )
                 {
                     CommandBuffer.RemoveComponent<Firing>( index, WeaponEntities[index] );
                 }
@@ -44,14 +44,14 @@ namespace CrawlEmUp.Gameplay
         protected override JobHandle OnUpdate( JobHandle inputDeps )
         {
             float time = UnityEngine.Time.time;
-            
+
             return new RemoveFiringJob
             {
                 WeaponEntities = weaponFiringEntityFilter.Entities,
                 Weapons = weaponFiringEntityFilter.WeaponComponents,
                 Firings = weaponFiringEntityFilter.FiringComponents,
                 CommandBuffer = firingCleanupBarrier.CreateCommandBuffer().ToConcurrent(),
-                time = time
+                Time = time
             }.Schedule( weaponFiringEntityFilter.Length, 16, inputDeps );
         }
 
