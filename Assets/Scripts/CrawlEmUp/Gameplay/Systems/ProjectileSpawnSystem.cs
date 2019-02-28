@@ -1,5 +1,6 @@
 namespace CrawlEmUp.Gameplay
 {
+    using UnityEngine;
     using Unity.Entities;
     using Unity.Jobs;
     using Unity.Burst;
@@ -38,13 +39,15 @@ namespace CrawlEmUp.Gameplay
 
             private float3 GetHeadingDirection( float4 quaternion )
             {
-                float4 nq = math.normalize( quaternion );
-                float3 directionVector = float3.zero;
-                directionVector.x = 2.0f * ( nq.x * nq.z - nq.w * nq.y );
-                directionVector.y = 2.0f * ( nq.y * nq.z - nq.w * nq.x );
-                directionVector.z = 1.0f - 2.0f * ( nq.x * nq.x + nq.y * nq.y );
+                // float4 nq = math.normalize( quaternion );
+                // float3 directionVector = float3.zero;
+                // directionVector.x = 2.0f * ( nq.x * nq.z - nq.w * nq.y );
+                // directionVector.y = 2.0f * ( nq.y * nq.z - nq.w * nq.x );
+                // directionVector.z = 1.0f - 2.0f * ( nq.x * nq.x + nq.y * nq.y );
 
-                return directionVector;
+                Vector3 euler = new Quaternion( quaternion.x, quaternion.y, quaternion.z, quaternion.w ).eulerAngles;
+                
+                return new float3( euler.x, euler.y, euler.z );
             }
         }
 

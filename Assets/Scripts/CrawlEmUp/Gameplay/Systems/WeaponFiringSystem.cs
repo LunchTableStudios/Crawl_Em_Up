@@ -47,7 +47,7 @@ namespace CrawlEmUp.Gameplay
                     WeaponEntities = weaponEntityFilter.Entities,
                     CommandBuffer = firingBarrier.CreateCommandBuffer().ToConcurrent(),
                     time = time
-                }.Schedule( weaponEntityFilter.Length, 16, inputDeps );
+                }.Schedule( weaponEntityFilter.Length, 64, inputDeps );
             }
 
             return inputDeps;

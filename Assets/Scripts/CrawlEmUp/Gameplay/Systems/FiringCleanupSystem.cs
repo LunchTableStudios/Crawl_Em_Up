@@ -52,7 +52,7 @@ namespace CrawlEmUp.Gameplay
                 Firings = weaponFiringEntityFilter.FiringComponents,
                 CommandBuffer = firingCleanupBarrier.CreateCommandBuffer().ToConcurrent(),
                 Time = time
-            }.Schedule( weaponFiringEntityFilter.Length, 16, inputDeps );
+            }.Schedule( weaponFiringEntityFilter.Length, 64, inputDeps );
         }
 
         public class FiringCleanupBarrier : BarrierSystem {}
